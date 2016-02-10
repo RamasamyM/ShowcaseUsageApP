@@ -43,7 +43,6 @@ public class SecondActivity extends DemoBase implements OnChartValueSelectedList
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_piechart);
 
-
         pieChart = (PieChart) findViewById(R.id.chart1);
         pieChart.setUsePercentValues(true);
         pieChart.setDescription("");
@@ -102,6 +101,7 @@ public class SecondActivity extends DemoBase implements OnChartValueSelectedList
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
+
             case R.id.actionToggleValues: {
                 for (IDataSet<?> set : pieChart.getData().getDataSets())
                     set.setDrawValues(!set.isDrawValuesEnabled());
@@ -156,8 +156,6 @@ public class SecondActivity extends DemoBase implements OnChartValueSelectedList
         return true;
     }
 
-
-
     private void setData(int count, float range) {
 
         float mult = range;
@@ -196,22 +194,17 @@ public class SecondActivity extends DemoBase implements OnChartValueSelectedList
 
         for (int c : ColorTemplate.PASTEL_COLORS)
             colors.add(c);
-
         colors.add(ColorTemplate.getHoloBlue());
-
         dataSet.setColors(colors);
         //dataSet.setSelectionShift(0f);
-
         PieData data = new PieData(xVals, dataSet);
         data.setValueFormatter(new PercentFormatter());
         data.setValueTextSize(11f);
         data.setValueTextColor(Color.WHITE);
         data.setValueTypeface(typeFace);
         pieChart.setData(data);
-
         // undo all highlights
         pieChart.highlightValues(null);
-
         pieChart.invalidate();
     }
 

@@ -4,9 +4,14 @@
 
     <item
         android:id="@+id/menu_item1"
-        android:icon="@drawable/ic_menu_gallery"
-        android:visible="true"
-        android:title="item1"
+        android:icon="@drawable/message"
+        android:title="no update"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_item2"
+        android:icon="@drawable/message"
+        android:title="new update"
         app:showAsAction="ifRoom"/>
 
 </menu>

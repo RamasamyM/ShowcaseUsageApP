@@ -14,8 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.Target;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import co.mobiwise.materialintro.shape.Focus;
 import co.mobiwise.materialintro.shape.FocusGravity;
@@ -37,17 +35,26 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
-        Target viewTarget = new ViewTarget(R.id.fab, this);
+       /* Target viewTarget = new ViewTarget(R.id.fab, this);
         new ShowcaseView.Builder(this)
                 .setTarget(viewTarget)
                 .setContentTitle(R.string.title_single_shot)
                 .setContentText(R.string.R_string_desc_single_shot).singleShot(42)
-                .build();
+                .build();*/
         floatingActionButton.setOnClickListener(this);
         showIntro(floatingActionButton, INTRO_CARD, "This is MainFAB! Hello There. click me!");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        new ShowcaseView.Builder(this)
+                .withMaterialShowcase()
+                .setTarget(new ToolbarActionItemTarget(toolbar, R.id.menu_item1))
+                .setStyle(R.style.CustomShowcaseTheme2)
+                .setContentText("Here's how to highlight items on a toolbar")
+                .build()
+                .show();
+
         showIntro(toolbar, INTRO_CARD, "This is ToolBar! Hello There. click me!t!");
 
 

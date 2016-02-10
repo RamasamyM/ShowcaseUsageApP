@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = "Mainactivity";
     private ShowcaseView showcaseView;
     private int counter = 0;
-    private FloatingActionButton floatingActionButton1, floatingActionButton2 ;
+    private FloatingActionButton mainFab, chartFab;
     private Animation fab_open, fab_close, rotate_forward, rotate_backward;
     private NavigationView navigationView;
     private Toolbar toolbar;
@@ -40,20 +40,20 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        floatingActionButton1 = (FloatingActionButton) findViewById(R.id.fab);
-        floatingActionButton1.setOnClickListener(this);
-        setFloatingActionButton(floatingActionButton1, SHOWCASEVIEW, "Welcome to the MainFAB click me! ");
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setToolbar(toolbar, SHOWCASEVIEW, "Welcome to the ToolBar click me! ");
-        floatingActionButton2 = (FloatingActionButton) findViewById(R.id.piechart_fabbutton);
+        mainFab = (FloatingActionButton) findViewById(R.id.main_fab_button);
+        chartFab = (FloatingActionButton) findViewById(R.id.piechart_fab_button);
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
         rotate_forward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_forward);
         rotate_backward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_backward);
+        mainFab.setOnClickListener(this);
+        setFloatingActionButton(mainFab, SHOWCASEVIEW, "Welcome to the MainFAB click me! ");
+        chartFab.setOnClickListener(this);
 
-        floatingActionButton2.setOnClickListener(this);
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -167,15 +167,18 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
+        int id =v.getId();
 
         Intent intent = null;
-        switch (v.getId()) {
-            case R.id.fab:
+        switch (id) {
+            case R.id.main_fab_button:
                 animateFAB();
                 break;
-            case R.id.piechart_fabbutton:
+            case R.id.piechart_fab_button:
                 intent = new Intent(this,SecondActivity.class);
                 Log.i(TAG, "pie chart activity call ");
+                break;
+            default:
                 break;
         }
         if(intent!=null) {
@@ -186,17 +189,17 @@ public class MainActivity extends AppCompatActivity
     }
     public void animateFAB() {
         if (isFabOpen) {
-            floatingActionButton1.startAnimation(rotate_backward);
-            floatingActionButton2.startAnimation(fab_close);
-            floatingActionButton2.setClickable(false);
+            mainFab.startAnimation(rotate_backward);
+            chartFab.startAnimation(fab_close);
+            chartFab.setClickable(false);
             isFabOpen= false;
             Log.d("Ramasamy", "close");
         }
         else
         {
-            floatingActionButton1.startAnimation(rotate_forward);
-            floatingActionButton2.startAnimation(fab_open);
-            floatingActionButton2.setClickable(true);
+            mainFab.startAnimation(rotate_forward);
+            chartFab.startAnimation(fab_open);
+            chartFab.setClickable(true);
             isFabOpen = true;
             Log.d("Ramasamy", "open");
         }

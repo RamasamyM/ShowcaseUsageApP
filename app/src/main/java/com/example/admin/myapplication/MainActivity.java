@@ -9,9 +9,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 
@@ -21,12 +24,15 @@ import co.mobiwise.materialintro.view.MaterialIntroView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+    private static final String TAG = "Mainactivity";
     private ShowcaseView showcaseView;
     private int counter = 0;
-    private FloatingActionButton floatingActionButton;
+    private FloatingActionButton floatingActionButton1, floatingActionButton2 ;
+    private Animation fab_open, fab_close, rotate_forward, rotate_backward;
     private NavigationView navigationView;
     private Toolbar toolbar;
-    private static final String INTRO_CARD = "material_intro";
+    private static final String SHOWCASEVIEW  = "showcase";
+    private Boolean isFabOpen = false;
 
 
     @Override
@@ -34,37 +40,26 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
-       /* Target viewTarget = new ViewTarget(R.id.fab, this);
-        new ShowcaseView.Builder(this)
-                .setTarget(viewTarget)
-                .setContentTitle(R.string.title_single_shot)
-                .setContentText(R.string.R_string_desc_single_shot).singleShot(42)
-                .build();*/
-        floatingActionButton.setOnClickListener(this);
-        showIntro(floatingActionButton, INTRO_CARD, "This is MainFAB! Hello There. click me!");
+        floatingActionButton1 = (FloatingActionButton) findViewById(R.id.fab);
+        floatingActionButton1.setOnClickListener(this);
+        setFloatingActionButton(floatingActionButton1, SHOWCASEVIEW, "Welcome to the MainFAB click me! ");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setToolbar(toolbar, SHOWCASEVIEW, "Welcome to the ToolBar click me! ");
+        floatingActionButton2 = (FloatingActionButton) findViewById(R.id.piechart_fabbutton);
+        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+        fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
+        rotate_forward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_forward);
+        rotate_backward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_backward);
 
-        new ShowcaseView.Builder(this)
-                .withMaterialShowcase()
-                .setTarget(new ToolbarActionItemTarget(toolbar, R.id.menu_item1))
-                .setStyle(R.style.CustomShowcaseTheme2)
-                .setContentText("Here's how to highlight items on a toolbar")
-                .build()
-                .show();
-
-        showIntro(toolbar, INTRO_CARD, "This is ToolBar! Hello There. click me!t!");
-
-
+        floatingActionButton2.setOnClickListener(this);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-
         drawer.setDrawerListener(toggle);
-        toggle.syncState();
 
+        toggle.syncState();
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -96,7 +91,6 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.menu_item1) {
             return true;
@@ -142,12 +136,12 @@ public class MainActivity extends AppCompatActivity
         }
     }*/
 
-    private void showIntro(FloatingActionButton view, String usageId, String text)
+    private void setFloatingActionButton(FloatingActionButton view, String usageId, String text)
     {
         new MaterialIntroView.Builder(this)
                 .enableDotAnimation(true)
                 .setFocusGravity(FocusGravity.CENTER)
-                .setFocusType(Focus.MINIMUM)
+                .setFocusType(Focus.ALL)
                 .setDelayMillis(200)
                 .enableFadeAnimation(true)
                 .performClick(true)
@@ -156,7 +150,7 @@ public class MainActivity extends AppCompatActivity
                 .setUsageId(usageId) //THIS SHOULD BE UNIQUE ID
                 .show();
     }
-    private void showIntro(View view, String usageId, String text)
+    private void setToolbar(View view, String usageId, String text)
     {
         new MaterialIntroView.Builder(this)
                 .enableDotAnimation(true)
@@ -170,8 +164,41 @@ public class MainActivity extends AppCompatActivity
                 .setUsageId(usageId) //THIS SHOULD BE UNIQUE ID
                 .show();
     }
+
     @Override
     public void onClick(View v) {
 
+        Intent intent = null;
+        switch (v.getId()) {
+            case R.id.fab:
+                animateFAB();
+                break;
+            case R.id.piechart_fabbutton:
+                intent = new Intent(this,SecondActivity.class);
+                Log.i(TAG, "pie chart activity call ");
+                break;
+        }
+        if(intent!=null) {
+            startActivity(intent);
+        }
+
+
+    }
+    public void animateFAB() {
+        if (isFabOpen) {
+            floatingActionButton1.startAnimation(rotate_backward);
+            floatingActionButton2.startAnimation(fab_close);
+            floatingActionButton2.setClickable(false);
+            isFabOpen= false;
+            Log.d("Ramasamy", "close");
+        }
+        else
+        {
+            floatingActionButton1.startAnimation(rotate_forward);
+            floatingActionButton2.startAnimation(fab_open);
+            floatingActionButton2.setClickable(true);
+            isFabOpen = true;
+            Log.d("Ramasamy", "open");
+        }
     }
 }
